@@ -156,7 +156,6 @@ const cssSelectorBuilder = {
 
   combine(selector1, combinator, selector2) {
     this.combain = `${selector1.stringify()} ${combinator} ${selector2.stringify()}`;
-    console.log(this.combain);
     this.isCombain = true;
     return this;
   },

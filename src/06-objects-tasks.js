@@ -120,47 +120,41 @@ function fromJSON(proto, json) {
  */
 
 const cssSelectorBuilder = {
-  element: undefined,
-  id: undefined,
-  class: [],
-  attribute: [],
-  orderSequence: ['element', 'id', 'class', 'attribute', 'pseudo-class', 'pseudo-element', 'combine'],
   element(value) {
-    this.element = value;
+    this.elTag = value;
   },
 
   id(value) {
-    this.id = value;
+    this.elId = value;
     return this;
   },
 
   class(value) {
-    this.class.push(`.${value}`);
+    this.elClass.push(`.${value}`);
     return this;
   },
 
   attr(value) {
-    this.attribute.push(value);
+    this.elAttr.push(value);
     return this;
   },
 
   pseudoClass(value) {
-    this.pseudoClass.push(`:${value}`);
+    this.elPseudoClass.push(`:${value}`);
     return this;
   },
 
   pseudoElement(value) {
-    this.pseudoElement = value
+    this.elPseudoElement = value;
     return this;
   },
 
-  combine(selector1, combinator, selector2) {
+  combine(/* selector1, combinator, selector2 */) {
     return this;
   },
 
   stringify() {
-    const classList = this.class.join('');
-  }
+  },
 };
 
 

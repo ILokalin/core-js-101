@@ -120,12 +120,17 @@ function fromJSON(proto, json) {
  */
 
 const cssSelectorBuilder = {
+  isCombain: false,
+  elClass: [],
+  elAttr: [],
+  elPseudoClass: [],
   element(value) {
     this.elTag = value;
+    return this;
   },
 
   id(value) {
-    this.elId = value;
+    this.elId = `#${value}`;
     return this;
   },
 
@@ -145,15 +150,53 @@ const cssSelectorBuilder = {
   },
 
   pseudoElement(value) {
-    this.elPseudoElement = value;
+    this.elPseudoElement = `::${value}`;
     return this;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
+  combine(selector1, combinator, selector2) {
+    this.combain = `${selector1.stringify()} ${combinator} ${selector2.stringify()}`;
+    console.log(this.combain);
+    this.isCombain = true;
     return this;
+  },
+
+  clear() {
+    this.isCombain = false;
+    this.elTag = '';
+    this.elId = '';
+    this.elPseudoElement = '';
+    this.elClass = [];
+    this.elAttr = [];
+    this.elPseudoClass = [];
   },
 
   stringify() {
+    if (this.isCombain) {
+      this.clear();
+      return this.combain;
+    }
+
+    let result = '';
+    result += this.elTag ? this.elTag : '';
+    result += this.elId ? this.elId : '';
+
+    if (this.elClass.length > 0) {
+      result += this.elClass.reduce((acc, className) => acc + className);
+    }
+
+    if (this.elAttr.length > 0) {
+      result += `[${this.elAttr.reduce((acc, attr) => acc + attr)}]`;
+    }
+
+    if (this.elPseudoClass.length > 0) {
+      result += this.elPseudoClass.reduce((acc, pClass) => acc + pClass);
+    }
+
+    result += this.elPseudoElement ? this.elPseudoElement : '';
+
+    this.clear();
+    return result;
   },
 };
 
